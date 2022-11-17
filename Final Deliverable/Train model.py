@@ -13,7 +13,7 @@ import numpy as np
 
 #Model Building
 import tensorflow as tf
-import keras 
+import keras
 import keras.backend as K
 from keras.optimizers import SGD, Adam, Adagrad, RMSprop
 from keras.applications import *
@@ -37,7 +37,7 @@ from keras.models import model_from_json
 import os
 from os import listdir
 
-# ====================================================================================================================================== # 
+# ====================================================================================================================================== #
 # ====================================================================================================================================== #
 # ===========================================DEFINING THE REQUIRED FUNCTIONS============================================================ #
 # ====================================================================================================================================== #
@@ -49,7 +49,7 @@ def generateListofFiles(dirName):
     for fol_name in listOfFile:
         fullPath = os.path.join(dirName, fol_name)
         allFiles.append(fullPath)
-              
+
     return allFiles
 
 def Configure_CNN_Model(output_size):
@@ -57,7 +57,7 @@ def Configure_CNN_Model(output_size):
     K.clear_session()
     model = Sequential()
     model.add(Dropout(0.4,input_shape=(224, 224, 3)))
-    
+
     model.add(Conv2D(256, (5, 5),input_shape=(224, 224, 3),activation='relu'))
     model.add(MaxPool2D(pool_size=(2, 2)))
     #model.add(BatchNormalization())
@@ -79,7 +79,7 @@ def Configure_CNN_Model(output_size):
     model.add(Dropout(0.3))
 
     model.add(Dense(output_size, activation='softmax'))
-    
+
     return model
 
 def PrepreocessData(subfolders):
@@ -91,7 +91,7 @@ def PrepreocessData(subfolders):
         #setting folder path for each boat type
         files = glob.glob (paths + "/*.jpg")
         found.append((paths.split('\\')[-2],paths.split('\\')[-1]))
-        
+
         #itering all files under the folder one by one
         for myFile in files:
             img = Image.open(myFile)
@@ -118,12 +118,12 @@ def PrepreocessData(subfolders):
     print("X shape",X,"y_cat shape", y_cat)
     print("X shape",X.shape,"y_cat shape", y_cat.shape)
 
-    return X_data,Y_data,X,y_cat,found; 
+    return X_data,Y_data,X,y_cat,found;
 def splitData():
     X_train, X_test, y_train, y_test = train_test_split(X, y_cat, test_size=0.2)
     print("The model has " + str(len(X_train)) + " inputs")
     return X_train, X_test, y_train, y_test
-# ====================================================================================================================================== # 
+# ====================================================================================================================================== #
 # ====================================================================================================================================== #
 # ===========================================LOADING THE DATA AND PRE-PROCESSING DATA=================================================== #
 # ====================================================================================================================================== #
@@ -133,7 +133,7 @@ def splitData():
 
 
 # Loading the augumented data form local storage
-aug_data_location = "C:/Users/0xluk/OneDrive/Documents/Digital Naturalist/augumented data" 
+aug_data_location = "../Downloading the data/Digital Naturalist Dataset"
 Folders = generateListofFiles(aug_data_location)
 subfolders = []
 for num in range(len(Folders)):
@@ -144,7 +144,7 @@ X_data,Y_data,X,y_cat,found= PrepreocessData(subfolders)
 # Splitting the data to Test and Train
 X_train, X_test, y_train, y_test = splitData()
 
-# ====================================================================================================================================== # 
+# ====================================================================================================================================== #
 # ====================================================================================================================================== #
 # =====================================================BUILDING THE CNN MODEL=========================================================== #
 # ====================================================================================================================================== #
@@ -158,7 +158,7 @@ model.compile(loss='categorical_crossentropy',optimizer=Adam(lr=0.001),metrics=[
 weights = model.get_weights()
 model.set_weights(weights)
 
-# ====================================================================================================================================== # 
+# ====================================================================================================================================== #
 # ====================================================================================================================================== #
 # ========================================================PREDECTING IMAGE CLASSES====================================================== #
 # ====================================================================================================================================== #
@@ -173,7 +173,7 @@ for idx, result, x in zip(range(0,6), found, predictions[0]):
 #predicting the class with max probability
 ClassIndex=np.argmax(model.predict([X_test[image_number].reshape(1, 224,224,3)]),axis=1)
 print(found[ClassIndex[0]])
-# ====================================================================================================================================== # 
+# ====================================================================================================================================== #
 # ====================================================================================================================================== #
 # ========================================================SAVING THE MODEL LOCALLY====================================================== #
 # ====================================================================================================================================== #
