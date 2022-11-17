@@ -1,6 +1,6 @@
 # IBM-Project-19082-1659692978
 
-##Quiz scores
+## Quiz scores
 
 
 | **Name**                | **Quiz 1** | **Quiz 2** | **Quiz 3** | **Quiz 4** |
